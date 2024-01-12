@@ -3,6 +3,7 @@ import { styles } from "./styles";
 import React, { useState } from "react";
 import { Trash } from "phosphor-react-native";
 import Checkbox from 'expo-checkbox';
+import CheckboxComp from "../Checkbox";
 
 interface TaskProps {
     id: string,
@@ -19,10 +20,8 @@ export default function Task({ id, content, isDone, onMarkAsDone, onDeleteTask}:
     return (
         <>
             <View style={styles.taskBody} id={'view_' + id}>
-              <Checkbox
-                disabled={false}
+              <CheckboxComp 
                 value={isDone}
-                onValueChange={(newValue) => setChecked(newValue)}
               />
               <Text>{content}</Text>
               <Trash size={32}/>

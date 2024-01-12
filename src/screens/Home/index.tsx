@@ -12,7 +12,7 @@ export default function Home(){
     {
       id: '1',
       content: 'Integer urna interdum massa libero auctor neque turpis turpis semper.',
-      isDone: false
+      isDone: true
     },
     {
       id: '2',
@@ -92,7 +92,8 @@ export default function Home(){
                     <View style={styles.tasksFilled}>
                       {                      
                         tasks.map((task) => 
-                          <Task 
+                          <Task
+                            key={task.id} 
                             id={task.id}
                             content={task.content}
                             isDone={task.isDone}
