@@ -1,11 +1,46 @@
-import { SafeAreaView, Text, TouchableOpacity, View } from 'react-native'
+import { SafeAreaView, Text, TouchableOpacity, View, Image } from 'react-native'
 import Header from '../../components/Header';
 import {styles} from './styles'
 import Input from '../../components/Input';
 import {Add} from '../../components/Add';
 import { ClipboardText } from 'phosphor-react-native';
+import { useState } from 'react';
+import Task from '../../components/Task';
 
 export default function Home(){
+  const [tasks, setTasks] = useState([
+    {
+      id: '1',
+      content: 'Integer urna interdum massa libero auctor neque turpis turpis semper.',
+      isDone: false
+    },
+    {
+      id: '2',
+      content: 'Integer urna interdum massa libero auctor neque turpis turpis semper.',
+      isDone: false
+    }
+  ])
+
+  const [tasksCounter, setTasksCounter] = useState(() => {
+    return tasks.length
+  })
+
+  function tasksAreEmpty() {
+    if (tasksCounter == 0) {
+      return true
+    } else {
+      return false
+    }
+  }
+
+  function handleOnMarkAsDone(id: string) {
+    console.log('handleOnMarkAsDone')
+  }
+
+  function handleOnDeleteTask(id: string) {
+    console.log('handleOnDeleteTask')
+  }
+
     return(
         <>
           <View style={styles.container}>
@@ -44,11 +79,31 @@ export default function Home(){
                       </View>
                     </View>
                   </View>
-                  
-                  <View style={styles.emptyTaskList}>
-                    <ClipboardText size={56} color="#333" />
-                    <Text style={styles.emptyText}>Você ainda não tem tarefas cadastradas. Crie tarefas e organize seus itens a fazer</Text>
-                  </View>
+
+                  {
+                    tasksAreEmpty() ?
+                    
+                    <View style={styles.emptyTaskList}>
+                      <Image source={require('../../../assets/Clipboard.png')}/>
+                      <Text style={styles.emptyText}>Você ainda não tem tarefas cadastradas. Crie tarefas e organize seus itens a fazer</Text>
+                    </View>
+
+                    :
+                    <View style={styles.tasksFilled}>
+                      {                      
+                        tasks.map((task) => 
+                          <Task 
+                            id={task.id}
+                            content={task.content}
+                            isDone={task.isDone}
+                            onMarkAsDone={handleOnMarkAsDone}
+                            onDeleteTask={handleOnDeleteTask}
+                          />
+                        )
+                      }
+                    </View>
+
+                  }
               </View>
 
             </View>
