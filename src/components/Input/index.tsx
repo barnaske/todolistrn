@@ -2,7 +2,7 @@ import React, { useState } from "react"
 import { TextInput } from "react-native"
 import { styles } from "./styles"
 
-export default function Input() {
+export default function Input({...props}) {
     const [isFocused, setFocused] = useState(false)
 
     return(
@@ -14,6 +14,7 @@ export default function Input() {
             placeholder="Adicione uma nova tarefa"
             onFocus={() => setFocused(true)}
             onBlur={() => setFocused(false)}
+            {...props}
         />
     )
 }

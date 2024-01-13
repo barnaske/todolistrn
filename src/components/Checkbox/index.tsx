@@ -1,19 +1,16 @@
 import Checkbox from 'expo-checkbox';
 import { useState } from 'react';
+import { stylesCheckbox } from './styles'
+import { TouchableOpacity, View } from 'react-native';
 
-interface CheckboxProps {
-  value: boolean,
-}
+export default function CheckboxComp({...props} ) {
 
-export default function CheckboxComp({ value }: CheckboxProps) {
+  const [isChecked, setChecked] = useState(false);
 
-    const [isChecked, setChecked] = useState(false);
-
-    return(
-            <Checkbox
-              disabled={false}
-              onValueChange={(newValue) => setChecked(newValue)}
-              value={value}
-            />
-    )
+  return (
+      <Checkbox
+        disabled={false}
+        {...props}
+      />
+  )
 }

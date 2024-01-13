@@ -1,4 +1,5 @@
 import { StyleSheet } from "react-native"
+import { useFonts, Inter_400Regular, Inter_700Bold } from '@expo-google-fonts/inter'
 
 export const styles = StyleSheet.create({
   container: {
@@ -47,6 +48,7 @@ export const styles = StyleSheet.create({
   },
   emptyText: {
     textAlign: 'center',
+    // fontFamily: 'Inter_700Bold',
     fontSize: 14,
     fontStyle: 'normal',
     fontWeight: '700',

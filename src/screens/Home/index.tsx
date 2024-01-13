@@ -4,25 +4,25 @@ import {styles} from './styles'
 import Input from '../../components/Input';
 import {Add} from '../../components/Add';
 import { ClipboardText } from 'phosphor-react-native';
-import { useState } from 'react';
+import { FormEvent, useId, useState } from 'react';
 import Task from '../../components/Task';
+import * as Crypto from 'expo-crypto';
+
 
 export default function Home(){
+  const [taskContent, setTaskContent] = useState('')
+
   const [tasks, setTasks] = useState([
-    {
-      id: '1',
-      content: 'Integer urna interdum massa libero auctor neque turpis turpis semper.',
-      isDone: true
-    },
-    {
-      id: '2',
-      content: 'Integer urna interdum massa libero auctor neque turpis turpis semper.',
-      isDone: false
-    }
+
   ])
 
   const [tasksCounter, setTasksCounter] = useState(() => {
     return tasks.length
+  })
+
+  const [doneTasks, setDoneTasks] = useState(() => {
+    let alreadyDone = tasks.filter(task => task.isDone == true)
+    return alreadyDone.length
   })
 
   function tasksAreEmpty() {
@@ -33,12 +33,60 @@ export default function Home(){
     }
   }
 
+  function handleAddTask(event: FormEvent){
+    const newTask = {
+      id: Crypto.randomUUID(),
+      content: taskContent,
+      isDone: false
+    }
+    
+    setTasks([newTask, ...tasks])
+    console.log(tasks)
+    setTaskContent('')
+    setTasksCounter((actualState) => {
+      return actualState + 1
+    })
+  }
+
   function handleOnMarkAsDone(id: string) {
-    console.log('handleOnMarkAsDone')
+    const settingTaskAsDone = tasks.map(task => {
+      if (task.id == id) {
+        task.isDone = !task.isDone
+        if (task.isDone) {
+          setDoneTasks((actualState) => {
+            return actualState + 1
+          })
+        } else {
+          setDoneTasks((actualState) => {
+            return actualState - 1
+          })
+        }
+      }
+      return task
+    })
+
+    setTasks(settingTaskAsDone)
   }
 
   function handleOnDeleteTask(id: string) {
-    console.log('handleOnDeleteTask')
+    const tasksWithoutDeleteOne = tasks.filter(task => {
+      if (task.id == id) {
+        if (task.isDone) {
+          setDoneTasks((actualState) => {
+            return actualState - 1
+          })
+          setTasksCounter((actualState) => {
+            return actualState - 1
+          })
+        } else {
+          setTasksCounter((actualState) => {
+            return actualState - 1
+          })
+        }
+      }
+      return task.id != id ? task : null
+    })
+    setTasks(tasksWithoutDeleteOne)
   }
 
     return(
@@ -48,8 +96,11 @@ export default function Home(){
 
               <View style={styles.formWrapper}>
                 <View style={styles.newTaskForm}>
-                  <Input />
-                  <Add />
+                  <Input 
+                    value={taskContent}
+                    onChangeText={setTaskContent}
+                  />
+                  <Add onPress={handleAddTask}/>
                 </View>
               </View>
               
@@ -63,7 +114,7 @@ export default function Home(){
                       </Text>
                       <View style={styles.createdCounter}>
                         <Text style={styles.createdCountText}>
-                          0
+                          {tasksCounter}
                         </Text>
                       </View>
                     </View>
@@ -74,7 +125,7 @@ export default function Home(){
                       </Text>
                       <View style={styles.doneCounter}>
                         <Text style={styles.doneCountText}>
-                          0
+                          {doneTasks}
                         </Text>
                       </View>
                     </View>
